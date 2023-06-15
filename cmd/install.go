@@ -19,6 +19,11 @@ var installCmd = &cobra.Command{
 	Use:   "install",
 	Short: "Instala uma versão do ADF Web",
 	Long:  ``,
+	Example: `
+	$ adf install --version 0.0.1	
+	Instalando versão 0.0.1 do ADF Web...
+	Versão 0.0.1 do ADF Web instalada com sucesso
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		err := adfweb.InstallADFWeb(RepositoryServerAddress, RepositoryServerPort, installVersion)
 		if err != nil {

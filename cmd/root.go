@@ -120,7 +120,7 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Usando arquivo de configuração:", viper.ConfigFileUsed())
+		fmt.Fprintln(os.Stderr, "Usando arquivo de configuração:", viper.ConfigFileUsed() + "\n")
 		webPort = viper.GetInt("web.port")
 	}
 }
