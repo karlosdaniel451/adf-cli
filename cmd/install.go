@@ -42,6 +42,7 @@ func init() {
 	rootCmd.AddCommand(installCmd)
 
 	installCmd.Flags().StringVarP(&installVersion, "version", "v", "latest", "Versão da aplicação de design do ADF")
+	// installCmd.Flags().StringVarP(&installVersion, "", "", "latest", "Versão da aplicação de design do ADF")
 
 	// Here you will define your flags and configuration settings.
 

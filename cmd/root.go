@@ -34,16 +34,19 @@ const (
 	defaultWebPort int = 8050
 
 	RepositoryServerAddress string = "localhost"
-	RepositoryServerPort int = 8001
+	RepositoryServerPort    int    = 8001
 )
 
 var (
 	installedVersions []string
-	usedVersion string
+	usedVersion       string
 )
 
 // Config parameters
 var webPort int = defaultWebPort
+var webWorkDir string
+var dataServerAddress string
+var dataServerPort int
 
 var cfgFile string
 
@@ -66,7 +69,7 @@ var rootCmd = &cobra.Command{
 
 	$ adf list
 	ADF Web 0.0.1 - em uso`,
-	
+
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
@@ -116,11 +119,29 @@ func initConfig() {
 	viper.SetDefault("web.port", defaultWebPort)
 
 	rootCmd.Flags().Int("webPort", viper.GetInt("web.port"), "Número de porta TCP do ADF Web")
+	rootCmd.Flags().String("webWorkDir", viper.GetString("web.workdir"), "Diretório de trabalho do ADF Web")
+	rootCmd.Flags().String("dataServerAddress", viper.GetString("dataserver.address"), "Endereço do servidor de dados")
+	rootCmd.Flags().Int("dataServerPort", viper.GetInt("dataserver.port"), "Número de porta do servidor de dados")
+
 	viper.BindPFlag("web.port", rootCmd.Flags().Lookup("web.port"))
+	viper.BindPFlag("web.workdir", rootCmd.Flags().Lookup("web.workdir"))
+	viper.BindPFlag("dataserver.address", rootCmd.Flags().Lookup("dataserver.address"))
+	viper.BindPFlag("dataserver.port", rootCmd.Flags().Lookup("dataserver.port"))
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Usando arquivo de configuração:", viper.ConfigFileUsed() + "\n")
+		fmt.Fprintln(os.Stderr, "Usando arquivo de configuração:", viper.ConfigFileUsed()+"\n")
+
+		// Set config variables according to config value.
 		webPort = viper.GetInt("web.port")
+		webWorkDir = viper.GetString("web.workdir")
+		dataServerAddress = viper.GetString("dataserver.address")
+		dataServerPort = viper.GetInt("dataserver.port")
+
+		fmt.Printf(
+			"web.port: %d\nweb.workdir: %s\n"+
+				"dataserver.address: %s\ndataserver.port: %d\n\n",
+			webPort, webWorkDir, dataServerAddress, dataServerPort,
+		)
 	}
 }
